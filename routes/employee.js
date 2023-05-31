@@ -97,20 +97,24 @@ router.post('/employees', (req, res) => {
   router.delete('/employees/:id', (req, res) => {
     const employeeId = req.params.id;
   
-    const deleteEmployeeQuery = 'DELETE FROM employees WHERE id = ?';
-    console.log(employeeId)
-    connection.query(deleteEmployeeQuery, [employeeId], (err) => {
+
+    connection.query('DELETE FROM contact_details WHERE employee_id = ?', [employeeId], (err) => {
       if (err) {
-        res.status(500).json({ error: 'Failed to delete employee' });
-      } else {
-        connection.query('DELETE FROM contact_details WHERE employee_id = ?', [employeeId], (err) => {
+        res.status(500).json({ error: 'Failed to delete contact' });
+      } else { 
+        const deleteEmployeeQuery = 'DELETE FROM employees WHERE id = ?';
+      
+        connection.query(deleteEmployeeQuery, [employeeId], (err) => {
           if (err) {
-            res.status(500).json({ error: 'Failed to delete contact' });
-          } else { 
+            res.status(500).json({ error: 'Failed to delete employee' });
+          } else {
             res.json({ message: 'Employee deleted successfully' });
+            
           }
         });
       }
+   
+    
     });
   });
   
